@@ -60,17 +60,13 @@ public class Board {
        //     return word.getRow() == 7 && word.getCol() == 7;
        // }
 
-        for (Tile tile : tiles) {
-            int currentRow = vertical ? row : row + (col - word.getCol());
-            int currentCol = vertical ? col + (row - word.getRow()) : col;
+        for (int i=0; i<tiles.length; i++) {
+            r = vertical ? row + i : row;
+            c = vertical ? col : col + i;
            
             // Checks if the user is trying to use a existing letter on the board
-            if (tile == null && GameBoard[currentRow][currentCol] == null)
-                return false;
-            // Tile currentTile = GameBoard[currentRow][currentCol];
-            // if (currentTile != null)
-            //     if (tile.letter != currentTile.letter)
-            //         return false;    
+            if (word.tiles[i] == null && GameBoard[r][c] == null)
+                return false;   
             
 ///////////////////////////////////////////////////////////////////////////
            /*
@@ -209,28 +205,12 @@ public class Board {
         }
         return tiles;
     }
-
-    public String print(){
-        String str = "";
-        for (int i = 0; i < 15; i++) str += i;
-        str += "\n\n";
-        for (int i = 0; i < 15; i++) {
-            str += i;
-            str += " ";
-            for (int j = 0; j < 15; j++) {
-                Tile tile = GameBoard[i][j];
-                if (tile == null) str += ".";
-                else str += tile.letter;
-            }
-            str += "\n";
-        }
-        return str;
-    }
     
     public int getScore(Word word) {
         // Calculate the score for the given word, considering bonus squares
         int score = 0;
         int doublingWord = 1;
+        boolean newWordFlag = true;
         int row = word.getRow();
         int col = word.getCol();
         boolean vertical = word.isVertical();
@@ -241,9 +221,10 @@ public class Board {
             int c =vertical ? col : col + i;
             
             if (tiles[i] == null)
+            {
                 tiles[i] = GameBoard[r][c];
-                //continue;
-            //score += GameBoard[r][c].score;
+                newWordFlag = false;
+            }
 
             if (r == 7 && c == 7) {
                 doublingWord *= 2; // Center square (double word score) - star
@@ -259,14 +240,14 @@ public class Board {
                 r == 14 && c == 3 || r == 14 && c == 11) {
                 score += tiles[i].score * 2; // Double letter score - light blue
             }
-            if (r == 1 && c == 5 || r == 1 && c == 9 ||
+            else if (r == 1 && c == 5 || r == 1 && c == 9 ||
                 r == 5 && c == 1 || r == 5 && c == 5 ||  r == 5 && c == 9 || r == 5 && c == 13 ||
                 r == 9 && c == 1 || r == 9 && c == 5 ||  r == 9 && c == 9 || r == 9 && c == 13 ||
                 r == 13 && c == 5 || r == 13 && c == 9) {
                 score += tiles[i].score * 3; // Triple letter score - blue
             }
 
-            if (r == 1 && c == 1 || r == 1 && c == 13 ||
+            else if (r == 1 && c == 1 || r == 1 && c == 13 ||
                 r == 2 && c == 2 || r == 2 && c == 12 ||
                 r == 3 && c == 3 || r == 3 && c == 11 ||
                 r == 4 && c == 4 || r == 4 && c == 10 ||
@@ -278,7 +259,7 @@ public class Board {
                 score += tiles[i].score;
             }
 
-            if (r == 0 && c == 0 || r == 0 && c == 7 || r == 0 && c == 14 ||
+            else if (r == 0 && c == 0 || r == 0 && c == 7 || r == 0 && c == 14 ||
                 r == 7 && c == 0 || r == 7 && c == 14 ||
                 r == 14 && c == 0 || r == 14 && c == 7 || r == 14 && c == 14) {
                 doublingWord *= 3; // Triple word score - red
@@ -296,6 +277,7 @@ public class Board {
                 col++;
             }*/
         }
+        if (newWordFlag)
         score *= doublingWord;
 
         return score;
@@ -310,17 +292,11 @@ public class Board {
         score += getScore(word);
         int row = word.getRow();
         int col = word.getCol();
-        //Tile t;
         
         // Place the tile on the board
         for (int i=0; i < word.getTiles().length; i++){
-            if (word.tiles[i] != null){
-                //t = (Tile)Tile.Bag.getBag().getTile(word.getTiles()[i].letter);
-                //t = word.getTiles()[i];
-                //GameBoard[row][col] = t;
-                //Board.getBoard().getTiles()[row][col] = t;
-                GameBoard[row][col] = word.tiles[i];    //למה זה לא מכניס לי את המילה???????
-            }
+            if (word.tiles[i] != null)
+                GameBoard[row][col] = word.tiles[i];
             
             if (word.isVertical())
                 row++;
@@ -329,7 +305,25 @@ public class Board {
         }
 
         return score;
-    }    
+    } 
+    
+    public String print(){
+        String str = "";
+        str += "\n\n";
+        for (int i = 0; i < 15; i++) str += i;
+        str += "\n";
+        for (int i = 0; i < 15; i++) {
+            str += i;
+            str += " ";
+            for (int j = 0; j < 15; j++) {
+                Tile tile = GameBoard[i][j];
+                if (tile == null) str += ".";
+                else str += tile.letter;
+            }
+            str += "\n";
+        }
+        return str;
+    }
 }
 
 
