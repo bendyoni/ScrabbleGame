@@ -88,12 +88,14 @@ public class MainTrain {
 			System.out.println("problem in placeWord for 2ed word (-10)");
 
 		Word paste=new Word(get("PASTE"), 9, 5, false);
-		if(b.tryPlaceWord(paste)!=25)
-			System.out.println("problem in placeWord for 3ed word (-10)");
+		if(b.tryPlaceWord(paste)!=25){
+			System.out.println("problem in placeWord for 3ed word (-10)" );
+		}
+			
 
 		Word mob=new Word(get("_OB"), 8, 7, false);
 		if(b.tryPlaceWord(mob)!=18)
-			System.out.println("problem in placeWord for 4th word (-10)");
+			System.out.println("problem in placeWord for 4th word (-10) ");
 
 		Word bit=new Word(get("BIT"), 10, 4, false);
 		if(b.tryPlaceWord(bit)!=22)
